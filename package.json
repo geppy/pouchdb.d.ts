@@ -6,7 +6,7 @@
   "repository": "https://github.com/AGBrown/pouchdb-typescript",
   "license": "MIT",
   "devDependencies": {
-    "typescript": "1.6.2"
+    "typescript": "^1.8.10"
   },
   "scripts": {
     "pretest": "npm run list-main; npm run list-subs; cat ts-files.txt;",
