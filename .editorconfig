@@ -11,7 +11,7 @@ insert_final_newline = true
 indent_style = space
 indent_size = 2
 
-# Indentation override for the main .ts file
-[pouchdb.d.ts,pouchdb-tests.ts]
+# Indentation override for the definitions
+[src/**.ts]
 indent_style = space
 indent_size = 4
