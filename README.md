@@ -1,4 +1,4 @@
-﻿# Typescript Definitions for [pouchdb][pouchdb] (v3.4.0+)
+﻿# Typescript Definitions for [pouchdb][pouchdb] (v5.4.4+)
 
 | branch | build status |
 | ------ | ------------ |
@@ -13,7 +13,7 @@
 
 ## Motivation:
 
-The current [DefinitelyTyped][DefinitelyTyped] definition [file][pouchdb-dt-0.1] for [pouchdb][pouchdb] seems to be for Pouch 0.1 (according to the version in the comments). This repo was created just as v3.4.0 was released.
+The current [DefinitelyTyped][DefinitelyTyped] definition [file][pouchdb-dt-0.1] for [pouchdb][pouchdb] seems to be for Pouch 0.1 (according to the version in the comments). This repo is working on definitions for v5.4.4.
 
 ## Goals
 
