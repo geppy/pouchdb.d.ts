@@ -203,6 +203,24 @@ declare namespace PouchDB {
             callback: Core.Callback<any, Core.Document<Content>>): void;
         get(docId: Core.DocumentId): Promise<Core.Document<Content>>;
 
+        /** Create a new document without providing an id.
+         *
+         * You should prefer put() to post(), because when you post(), you are
+         * missing an opportunity to use allDocs() to sort documents by _id
+         * (because your _ids are random).
+         *
+         * @see {@link https://pouchdb.com/2014/06/17/12-pro-tips-for-better-code-with-pouchdb.html|PouchDB Pro Tips}
+         * */
+        post(doc: Core.Document<Content>,
+            id: Core.DocumentId | void,
+            revision: Core.RevisionId | void,
+            options: Core.PutOptions | void,
+            callback: Core.Callback<Core.Error, Core.Response>): void;
+        post(doc: Core.Document<Content>,
+            id?: Core.DocumentId,
+            revision?: Core.RevisionId,
+            options?: Core.PutOptions): Promise<Core.Response>;
+
         /** Create a new document or update an existing document.
          *
          * If the document already exists, you must specify its revision _rev,
