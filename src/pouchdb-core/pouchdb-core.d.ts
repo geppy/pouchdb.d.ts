@@ -89,6 +89,8 @@ declare namespace PouchDB {
         /** @todo does this have any other properties? */
         interface PutOptions extends Options {
         }
+        interface PostOptions extends PutOptions {
+        }
 
         interface InfoOptions extends Options {
         }
@@ -211,15 +213,11 @@ declare namespace PouchDB {
          *
          * @see {@link https://pouchdb.com/2014/06/17/12-pro-tips-for-better-code-with-pouchdb.html|PouchDB Pro Tips}
          * */
-        post(doc: Core.Document<Content>,
-            id: Core.DocumentId | void,
-            revision: Core.RevisionId | void,
-            options: Core.PutOptions | void,
+        post(doc: Core.NewDocument<Content>,
+            options: Core.PostOptions | void,
             callback: Core.Callback<Core.Error, Core.Response>): void;
-        post(doc: Core.Document<Content>,
-            id?: Core.DocumentId,
-            revision?: Core.RevisionId,
-            options?: Core.PutOptions): Promise<Core.Response>;
+        post(doc: Core.NewDocument<Content>,
+            options?: Core.PostOptions): Promise<Core.Response>;
 
         /** Create a new document or update an existing document.
          *
