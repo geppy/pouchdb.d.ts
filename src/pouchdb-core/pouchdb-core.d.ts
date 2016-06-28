@@ -33,7 +33,12 @@ declare namespace PouchDB {
         interface RevisionIdMeta {
             _rev: RevisionId;
         }
-        interface RevisionMeta {
+        interface GetMeta {
+            /** Conflicting leaf revisions.
+             *
+             * Only present if `GetOptions.conflicts` is `true`
+             */
+            _conflicts?: RevisionId[];
             _rev?: RevisionId;
             /** Only present if `GetOptions.revs` is `true` */
             _revs_info?: RevisionInfo[];
@@ -50,6 +55,8 @@ declare namespace PouchDB {
         }
 
         interface GetOptions extends Options {
+            /** Include list of conflicting leaf revisions. */
+            conflicts?: boolean;
             /** Specific revision to fetch */
             rev?: RevisionId;
             /** Include revision history of the document. */
@@ -154,8 +161,8 @@ declare namespace PouchDB {
         /** Fetch a document */
         get(docId: Core.DocumentId, options: Core.GetOpenRevisions): Promise<Core.Revision<Content>[]>;
         get(docId: Core.DocumentId, options: Core.GetOpenRevisions, callback: Core.Callback<any, Core.Revision<Content>[]>): void;
-        get(docId: Core.DocumentId, options: Core.GetOptions): Promise<Core.Document<Content> & Core.RevisionMeta>;
-        get(docId: Core.DocumentId, options: Core.GetOptions, callback: Core.Callback<any, Core.Document<Content> & Core.RevisionMeta>): void;
+        get(docId: Core.DocumentId, options: Core.GetOptions): Promise<Core.Document<Content> & Core.GetMeta>;
+        get(docId: Core.DocumentId, options: Core.GetOptions, callback: Core.Callback<any, Core.Document<Content> & Core.GetMeta>): void;
         get(docId: Core.DocumentId, options: Core.GetOptions, callback: Core.Callback<any, Core.Document<Content>>): void;
         get(docId: Core.DocumentId): Promise<Core.Document<Content>>;
 
