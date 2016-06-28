@@ -163,7 +163,7 @@ declare namespace PouchDB {
         get(docId: Core.DocumentId, options: Core.GetOpenRevisions, callback: Core.Callback<any, Core.Revision<Content>[]>): void;
         get(docId: Core.DocumentId, options: Core.GetOptions): Promise<Core.Document<Content> & Core.GetMeta>;
         get(docId: Core.DocumentId, options: Core.GetOptions, callback: Core.Callback<any, Core.Document<Content> & Core.GetMeta>): void;
-        get(docId: Core.DocumentId, options: Core.GetOptions, callback: Core.Callback<any, Core.Document<Content>>): void;
+        get(docId: Core.DocumentId, options: void, callback: Core.Callback<any, Core.Document<Content>>): void;
         get(docId: Core.DocumentId): Promise<Core.Document<Content>>;
 
         /** Destroy the database */
