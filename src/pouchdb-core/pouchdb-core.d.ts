@@ -5,6 +5,8 @@
 
 declare namespace PouchDB {
     namespace Core {
+        interface Error {
+        }
         interface Callback<E, R> {
             (error: E | void, result: R | void): void;
         }
@@ -16,6 +18,18 @@ declare namespace PouchDB {
         interface Options {
           ajax?: Configuration.RemoteRequesterConfiguration;
         }
+
+        interface BasicResponse {
+            /** `true` if the operation was successful; `false` otherwise */
+            ok: boolean;
+        }
+        interface Response extends BasicResponse {
+            /** id of the targeted document */
+            id: DocumentId;
+            /** resulting revision of the targeted document */
+            rev: RevisionId;
+        }
+
         interface DatabaseInfo {
         }
 
@@ -70,6 +84,10 @@ declare namespace PouchDB {
              * revisions specified in open_revs array. Leaves will be returned
              * in the same order as specified in input array. */
             open_revs: 'all' | Core.RevisionId[];
+        }
+
+        /** @todo does this have any other properties? */
+        interface PutOptions extends Options {
         }
 
         interface InfoOptions extends Options {
@@ -145,7 +163,8 @@ declare namespace PouchDB {
             ajax?: RemoteRequesterConfiguration;
         }
 
-        type DatabaseConfiguration = LocalDatabaseConfiguration | RemoteDatabaseConfiguration;
+        type DatabaseConfiguration = LocalDatabaseConfiguration |
+                RemoteDatabaseConfiguration;
     }
 
 
@@ -153,25 +172,57 @@ declare namespace PouchDB {
     interface Static {
         plugin(plugin: Plugin): Static;
 
-        new<Content>(name: string, options?: Configuration.DatabaseConfiguration): Database<Content>;
-        new(name: string, options?: Configuration.DatabaseConfiguration): Database<any>;
+        new<Content>(name: string,
+            options?: Configuration.DatabaseConfiguration): Database<Content>;
+        new(name: string,
+            options?: Configuration.DatabaseConfiguration): Database<any>;
     }
 
     interface Database<Content>  {
-        /** Fetch a document */
-        get(docId: Core.DocumentId, options: Core.GetOpenRevisions): Promise<Core.Revision<Content>[]>;
-        get(docId: Core.DocumentId, options: Core.GetOpenRevisions, callback: Core.Callback<any, Core.Revision<Content>[]>): void;
-        get(docId: Core.DocumentId, options: Core.GetOptions): Promise<Core.Document<Content> & Core.GetMeta>;
-        get(docId: Core.DocumentId, options: Core.GetOptions, callback: Core.Callback<any, Core.Document<Content> & Core.GetMeta>): void;
-        get(docId: Core.DocumentId, options: void, callback: Core.Callback<any, Core.Document<Content>>): void;
-        get(docId: Core.DocumentId): Promise<Core.Document<Content>>;
-
         /** Destroy the database */
-        destroy(options: Core.DestroyOptions | void, callback: Core.AnyCallback): void;
+        destroy(options: Core.DestroyOptions | void,
+            callback: Core.AnyCallback): void;
         destroy(options?: Core.DestroyOptions | void): Promise<void>;
 
+        /** Fetch a document */
+        get(docId: Core.DocumentId,
+            options: Core.GetOpenRevisions): Promise<Core.Revision<Content>[]>;
+        get(docId: Core.DocumentId,
+            options: Core.GetOpenRevisions,
+            callback: Core.Callback<any,
+            Core.Revision<Content>[]>): void;
+        get(docId: Core.DocumentId,
+            options: Core.GetOptions
+            ): Promise<Core.Document<Content> & Core.GetMeta>;
+        get(docId: Core.DocumentId,
+            options: Core.GetOptions,
+            callback: Core.Callback<any, Core.Document<Content> & Core.GetMeta>
+            ): void;
+        get(docId: Core.DocumentId,
+            options: void,
+            callback: Core.Callback<any, Core.Document<Content>>): void;
+        get(docId: Core.DocumentId): Promise<Core.Document<Content>>;
+
+        /** Create a new document or update an existing document.
+         *
+         * If the document already exists, you must specify its revision _rev,
+         * otherwise a conflict will occur.
+         * There are some restrictions on valid property names of the documents.
+         * If you try to store non-JSON data (for instance Date objects) you may
+         * see inconsistent results. */
+        put(doc: Core.Document<Content>,
+            id: Core.DocumentId | void,
+            revision: Core.RevisionId | void,
+            options: Core.PutOptions | void,
+            callback: Core.Callback<Core.Error, Core.Response>): void;
+        put(doc: Core.Document<Content>,
+            id?: Core.DocumentId,
+            revision?: Core.RevisionId,
+            options?: Core.PutOptions): Promise<Core.Response>;
+
         /** Get database information */
-        info(options: Core.InfoOptions | void, callback: Core.Callback<any, Core.DatabaseInfo>): void;
+        info(options: Core.InfoOptions | void,
+            callback: Core.Callback<any, Core.DatabaseInfo>): void;
         info(options?: Core.InfoOptions): Promise<Core.DatabaseInfo>;
     }
 }
