@@ -12,8 +12,10 @@ declare namespace PouchDB {
         }
         type AnyCallback = Callback<any, any>;
         type DocumentId = string;
+        type DocumentKey = string;
         type RevisionId = string;
         type Availability = 'available' | 'compacted' | 'not compacted' | 'missing';
+        type Attachment = string | ArrayBuffer;
         type Encodable = { [propertyName: string]: any };
 
         interface Options {
@@ -67,6 +69,73 @@ declare namespace PouchDB {
         type Document<Content extends Encodable> = Content & IdMeta;
         type ExistingDocument<Content extends Encodable> =
                 Document<Content> & RevisionIdMeta;
+
+        interface AllDocsOptions extends Options {
+            /** Include attachment data for each document.
+             *
+             * Requires `include_docs` to be `true`.
+             *
+             * By default, attachments are Base64-encoded.
+             * @see binary
+             */
+            attachments?: boolean;
+            /** Return attachments as Buffers.
+             *
+             * Requires `include_docs` to be `true`.
+             * Requires `attachments` to be `true`. */
+            binary?: boolean;
+            /** Include conflict information for each document.
+             *
+             * Requires `include_docs` to be `true`. */
+            conflicts?: boolean;
+            /** Reverse ordering of results. */
+            descending?: boolean;
+            /** Include contents for each document. */
+            include_docs?: boolean;
+            /** Maximum number of documents to return. */
+            limit?: number;
+            /** Number of documents to skip before returning.
+             *
+             * Causes poor performance on IndexedDB and LevelDB. */
+            skip?: number;
+        }
+        interface AllDocsWithKeyOptions extends AllDocsOptions {
+            /** Constrain results to documents matching this key. */
+            key: DocumentKey;
+        }
+        interface AllDocsWithKeysOptions extends AllDocsOptions {
+            /** Constrains results to documents matching any of these keys. */
+            keys: DocumentId[];
+        }
+        interface AllDocsWithinRangeOptions extends AllDocsOptions {
+            /** Low end of range, or high end if `descending` is `true`. */
+            startkey: DocumentKey;
+            /** High end of range, or low end if `descending` is `true`. */
+            endkey: DocumentKey;
+            /** Include any documents identified by `endkey`.
+             *
+             * Defaults to `true`. */
+            inclusive_end?: boolean;
+        }
+        interface AllDocsMeta {
+            _attachments?: {
+                [attachmentId: string]: Attachment;
+            };
+        }
+        interface AllDocsResponse<Content extends Core.Encodable> {
+            /** The `skip` if provided, or in CouchDB the actual offset */
+            offset: number;
+            total_rows: number;
+            rows: {
+                /** Only present if `include_docs` was `true`. */
+                doc?: Document<Content & AllDocsMeta>;
+                id: DocumentId;
+                key: DocumentKey;
+                value: {
+                    rev: RevisionId;
+                }
+            }[];
+        }
 
         interface DestroyOptions extends Options {
         }
@@ -182,6 +251,19 @@ declare namespace PouchDB {
     }
 
     interface Database<Content extends Core.Encodable>  {
+        /** Fetch all documents matching the given key. */
+        allDocs(options: Core.AllDocsWithKeyOptions):
+            Promise<Core.AllDocsResponse<Content>>;
+        /** Fetch all documents matching any of the given keys. */
+        allDocs(options: Core.AllDocsWithKeysOptions):
+            Promise<Core.AllDocsResponse<Content>>;
+        /** Fetch all documents matching the given key range. */
+        allDocs(options: Core.AllDocsWithinRangeOptions):
+            Promise<Core.AllDocsResponse<Content>>;
+        /** Fetch all documents. */
+        allDocs(options?: Core.AllDocsOptions):
+            Promise<Core.AllDocsResponse<Content>>;
+
         /** Destroy the database */
         destroy(options: Core.DestroyOptions | void,
             callback: Core.AnyCallback): void;
