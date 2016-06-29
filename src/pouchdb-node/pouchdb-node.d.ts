@@ -19,6 +19,6 @@ declare namespace PouchDB {
 }
 
 declare module 'pouchdb-node' {
-    const plugin: PouchDB.Plugin;
-    export = plugin;
+    const PouchDb: PouchDB.Static;
+    export = PouchDb;
 }

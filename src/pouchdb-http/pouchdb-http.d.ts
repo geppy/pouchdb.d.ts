@@ -7,6 +7,6 @@
 /// <reference path="../pouchdb-adapter-http/pouchdb-adapter-http.d.ts" />
 
 declare module 'pouchdb-http' {
-    const plugin: PouchDB.Plugin;
-    export = plugin;
+    const PouchDb: PouchDB.Static;
+    export = PouchDb;
 }

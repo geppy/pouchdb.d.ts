@@ -9,10 +9,7 @@
 /// <reference path="../pouchdb-mapreduce/pouchdb-mapreduce.d.ts" />
 /// <reference path="../pouchdb-replication/pouchdb-replication.d.ts" />
 
-declare namespace PouchDB {
-}
-
 declare module 'pouchdb-browser' {
-    const plugin: PouchDB.Plugin;
-    export = plugin;
+    const PouchDb: PouchDB.Static;
+    export = PouchDb;
 }
