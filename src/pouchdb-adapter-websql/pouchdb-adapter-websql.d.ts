@@ -14,7 +14,8 @@ declare namespace PouchDB {
     }
 
     namespace AdapterWebSql {
-        interface Configuration extends Configuration.LocalDatabaseConfiguration {
+        interface Configuration
+                extends Configuration.LocalDatabaseConfiguration {
             /**
              * Amount in MB to request for storage.
              */
@@ -24,8 +25,8 @@ declare namespace PouchDB {
     }
 
     interface Static {
-        new<Content>(name?: string, options?: AdapterWebSql.Configuration): Database<Content>;
-        new(name?: string, options?: AdapterWebSql.Configuration): Database<any>;
+        new<Content extends Core.Encodable>(name: string | void,
+            options: AdapterWebSql.Configuration): Database<Content>;
     }
 }
 

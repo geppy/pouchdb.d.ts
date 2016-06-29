@@ -14,6 +14,7 @@ declare namespace PouchDB {
         type DocumentId = string;
         type RevisionId = string;
         type Availability = 'available' | 'compacted' | 'not compacted' | 'missing';
+        type Encodable = { [propertyName: string]: any };
 
         interface Options {
           ajax?: Configuration.RemoteRequesterConfiguration;
@@ -62,8 +63,10 @@ declare namespace PouchDB {
                 start: number;
             }
         }
-        type NewDocument<Content> = Content;
-        type Document<Content> = Content & IdMeta;
+        type NewDocument<Content extends Encodable> = Content;
+        type Document<Content extends Encodable> = Content & IdMeta;
+        type ExistingDocument<Content extends Encodable> =
+                Document<Content> & RevisionIdMeta;
 
         interface DestroyOptions extends Options {
         }
@@ -174,13 +177,11 @@ declare namespace PouchDB {
     interface Static {
         plugin(plugin: Plugin): Static;
 
-        new<Content>(name: string,
+        new<Content extends Core.Encodable>(name?: string,
             options?: Configuration.DatabaseConfiguration): Database<Content>;
-        new(name: string,
-            options?: Configuration.DatabaseConfiguration): Database<any>;
     }
 
-    interface Database<Content>  {
+    interface Database<Content extends Core.Encodable>  {
         /** Destroy the database */
         destroy(options: Core.DestroyOptions | void,
             callback: Core.AnyCallback): void;

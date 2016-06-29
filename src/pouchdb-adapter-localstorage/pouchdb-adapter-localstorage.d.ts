@@ -7,14 +7,16 @@
 
 declare namespace PouchDB {
     namespace LocalStorageAdapter {
-        interface LocalStorageAdapterConfiguration extends Configuration.LocalDatabaseConfiguration {
+        interface LocalStorageAdapterConfiguration 
+                extends Configuration.LocalDatabaseConfiguration {
             adapter: 'localstorage';
         }
     }
 
     interface Static {
-        new<Content>(name?: string, options?: LocalStorageAdapter.LocalStorageAdapterConfiguration): Database<Content>;
-        new(name?: string, options?: LocalStorageAdapter.LocalStorageAdapterConfiguration): Database<any>;
+        new<Content extends Core.Encodable>(name: string | void,
+            options: LocalStorageAdapter.LocalStorageAdapterConfiguration
+            ): Database<Content>;
     }
 }
 

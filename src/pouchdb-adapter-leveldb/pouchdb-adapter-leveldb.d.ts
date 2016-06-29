@@ -13,8 +13,9 @@ declare namespace PouchDB {
     }
 
     interface Static {
-        new<Content>(name?: string, options?: LevelDbAdapter.LevelDbAdapterConfiguration): Database<Content>;
-        new(name?: string, options?: LevelDbAdapter.LevelDbAdapterConfiguration): Database<any>;
+        new<Content extends Core.Encodable>(name: string | void,
+            options: LevelDbAdapter.LevelDbAdapterConfiguration
+            ): Database<Content>;
     }
 }
 

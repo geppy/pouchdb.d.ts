@@ -7,14 +7,16 @@
 
 declare namespace PouchDB {
     namespace HttpAdapter {
-        interface HttpAdapterConfiguration extends Configuration.RemoteDatabaseConfiguration {
+        interface HttpAdapterConfiguration
+                extends Configuration.RemoteDatabaseConfiguration {
             adapter: 'http';
         }
     }
 
     interface Static {
-        new<Content>(name?: string, options?: HttpAdapter.HttpAdapterConfiguration): Database<Content>;
-        new(name?: string, options?: HttpAdapter.HttpAdapterConfiguration): Database<any>;
+        new<Content extends Core.Encodable>(name: string | void,
+            options: HttpAdapter.HttpAdapterConfiguration
+            ): Database<Content>;
     }
 }
 

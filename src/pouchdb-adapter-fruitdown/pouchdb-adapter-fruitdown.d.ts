@@ -7,14 +7,16 @@
 
 declare namespace PouchDB {
     namespace FruitDOWNAdapter {
-        interface FruitDOWNAdapterConfiguration extends Configuration.LocalDatabaseConfiguration {
+        interface FruitDOWNAdapterConfiguration
+                extends Configuration.LocalDatabaseConfiguration {
             adapter: 'fruitdown';
         }
     }
 
     interface Static {
-        new<Content>(name?: string, options?: FruitDOWNAdapter.FruitDOWNAdapterConfiguration): Database<Content>;
-        new(name?: string, options?: FruitDOWNAdapter.FruitDOWNAdapterConfiguration): Database<any>;
+        new<Content extends Core.Encodable>(name: string | void,
+            options: FruitDOWNAdapter.FruitDOWNAdapterConfiguration
+            ): Database<Content>;
     }
 }
 
