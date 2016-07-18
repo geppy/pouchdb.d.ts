@@ -6,7 +6,7 @@
 /// <reference path="../pouchdb-core/pouchdb-core.d.ts" />
 
 declare namespace PouchDB {
-    export interface Database<Content> {
+    export interface Database<Content extends Core.Encodable> {
         /**
          * Cleans up any stale map/reduce indexes.
          *
